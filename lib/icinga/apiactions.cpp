@@ -391,10 +391,25 @@ Dictionary::Ptr ApiActions::RemoveDowntimeByID(const ConfigObject::Ptr& object,
 	return ApiActions::CreateResult(200, "Successfully removed downtime " + Convert::ToString(downtime_id) + ".");
 }
 
+Dictionary::Ptr ApiActions::ModifyGlobalNotificationDelivery(const ConfigObject::Ptr& object,
+    const Dictionary::Ptr& params)
+{
+	if (!params->Contains("active"))
+		return ApiActions::CreateResult(403, "Parameter 'active' is required.");
+
+	IcingaApplication::GetInstance()->SetEnableNotifications(params->Get("active"));
+
+	return ApiActions::CreateResult(200, "Globally " +
+	    String((params->Get("active") ? "enabled" : "disabled")) + " notifications.");
+}
+
 Dictionary::Ptr ApiActions::ModifyGlobalFlapDetection(const ConfigObject::Ptr& object,
     const Dictionary::Ptr& params)
 {
-	IcingaApplication::GetInstance()->SetEnableFlapping(true);
+	if (!params->Contains("active"))
+		return ApiActions::CreateResult(403, "Parameter 'active' is required.");
+
+	IcingaApplication::GetInstance()->SetEnableFlapping(params->Get("active"));
 
 	return ApiActions::CreateResult(200, "Globally " +
 	    String((params->Get("active") ? "enabled" : "disabled")) + " flap detection.");
@@ -403,7 +418,10 @@ Dictionary::Ptr ApiActions::ModifyGlobalFlapDetection(const ConfigObject::Ptr& o
 Dictionary::Ptr ApiActions::ModifyGlobalEventHandling(const ConfigObject::Ptr& object,
     const Dictionary::Ptr& params)
 {
-	IcingaApplication::GetInstance()->SetEnableEventHandlers(true);
+	if (!params->Contains("active"))
+		return ApiActions::CreateResult(403, "Parameter 'active' is required.");
+
+	IcingaApplication::GetInstance()->SetEnableEventHandlers(params->Get("active"));
 
 	return ApiActions::CreateResult(200, "Globally " +
 	    String((params->Get("active") ? "enabled" : "disabled")) + " event handlers.");
@@ -412,7 +430,10 @@ Dictionary::Ptr ApiActions::ModifyGlobalEventHandling(const ConfigObject::Ptr& o
 Dictionary::Ptr ApiActions::ModifyGlobalPerformanceDataCollection(const ConfigObject::Ptr& object,
     const Dictionary::Ptr& params)
 {
-	IcingaApplication::GetInstance()->SetEnablePerfdata(true);
+	if (!params->Contains("active"))
+		return ApiActions::CreateResult(403, "Parameter 'active' is required.");
+
+	IcingaApplication::GetInstance()->SetEnablePerfdata(params->Get("active"));
 
 	return ApiActions::CreateResult(200, "Globally " +
 	    String((params->Get("active") ? "enabled" : "disabled")) + " perfomance data processing.");
@@ -421,7 +442,10 @@ Dictionary::Ptr ApiActions::ModifyGlobalPerformanceDataCollection(const ConfigOb
 Dictionary::Ptr ApiActions::ModifyGlobalServiceCheckExecution(const ConfigObject::Ptr& object,
     const Dictionary::Ptr& params)
 {
-	IcingaApplication::GetInstance()->SetEnableServiceChecks(true);
+	if (!params->Contains("active"))
+		return ApiActions::CreateResult(403, "Parameter 'active' is required.");
+
+	IcingaApplication::GetInstance()->SetEnableServiceChecks(params->Get("active"));
 
 	return ApiActions::CreateResult(200, "Globally "
 	    + String((params->Get("active") ? "enabled" : "disabled")) + " service check execution.");
@@ -430,7 +454,10 @@ Dictionary::Ptr ApiActions::ModifyGlobalServiceCheckExecution(const ConfigObject
 Dictionary::Ptr ApiActions::ModifyGlobalHostCheckExecution(const ConfigObject::Ptr& object,
     const Dictionary::Ptr& params)
 {
-	IcingaApplication::GetInstance()->SetEnableHostChecks(true);
+	if (!params->Contains("active"))
+		return ApiActions::CreateResult(403, "Parameter 'active' is required.");
+
+	IcingaApplication::GetInstance()->SetEnableHostChecks(params->Get("active"));
 
 	return ApiActions::CreateResult(200, "Globally "
 	    + String((params->Get("active") ? "enabled" : "disabled")) + " host check execution.");
