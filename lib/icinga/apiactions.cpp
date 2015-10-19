@@ -168,10 +168,8 @@ Dictionary::Ptr ApiActions::SendCustomNotification(const ConfigObject::Ptr& obje
 	if (!params->Contains("comment"))
 		return ApiActions::CreateResult(403, "Parameter 'comment' is required.");
 
-	if (params->Contains("options")) {
-		if (Convert::ToLong(HttpUtility::GetLastParameter(params, "options")) & 2)
-			checkable->SetForceNextNotification(true);
-	}
+	if (Convert::ToBool(HttpUtility::GetLastParameter(params, "force")))
+		checkable->SetForceNextNotification(true);
 
 	Checkable::OnNotificationsRequested(checkable, NotificationCustom, checkable->GetLastCheckResult(), 
 	    HttpUtility::GetLastParameter(params, "author"), HttpUtility::GetLastParameter(params, "comment"));

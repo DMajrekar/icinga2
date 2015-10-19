@@ -245,49 +245,28 @@ filters and even more functionality.
 
 Actions require specific target types (e.g. `type=Host`) and a [filter expression](9-icinga2-api.md#icinga2-api-filters).
 
-**TODO** Figure out the final names.
-
 Action name                            | Parameters                        | Target types             | Notes
 ---------------------------------------|-----------------------------------|--------------------------|-----------------------
 process-check-result                   | exit_status; plugin_output; check_source; performance_data[]; check_command[]; execution_end; execution_start; schedule_end; schedule_start | Service; Host | -
-reschedule-check                       | {next_check}; {(force_check)} | Service; Host | -
-acknowledge-problem                    | author; comment; {timestamp}; {(sticky)}; {(notify)} | Service; Host | -
+reschedule-check                       | (next_check); (force_check)  | Service; Host | next_check defaults to the current time, force_check to false
+send-custom-notification               | author; comment; (force) | Service; Host | default for force is false
+delay-notification                     | timestamp | Service;Host | - 
+acknowledge-problem                    | author; comment; timestamp; (sticky); (notify) | Service; Host | default for sticky is true, notify is false
 remove-acknowledgement                 | - | Service; Host | -
 add-comment                            | author; comment | Service; Host | -
 remove-comment                         | - | Service;Host | -
-remove-comment-by-id                   | comment_id | - | -
-delay-notifications                    | timestamp | Service;Host | -
-add-downtime                           | start_time; end_time; duration; author; comment; {trigger_id}; {(fixed)} | Service; Host; ServiceGroup; HostGroup | Downtime for all services on host x?
+remove-comment-by-id                   | comment_id | - | Uses legacy ids
+schedule-downtime                      | start_time; end_time; duration; author; comment; trigger_id; (fixed) | Service; Host | default for fixed is false
 remove-downtime                        | - | Service; Host | -
-remove-downtime-by-id                  | downtime_id | - | -
-send-custom-notification               | options[]; author; comment | Service; Host | -
+remove-downtime-by-id                  | downtime_id | - | Uses legacy ids
+shutdown-process                       | - | -
+restart-process                        | - | -
 
-enable-passive-checks                  | - | Service; Host; ServiceGroup; HostGroup | "System" as target?
-disable-passive-checks                 | - | Service; Host; ServiceGroup; HostGroup | diable all passive checks for services of hosts y in hostgroup x?
-enable-active-checks                   | - | Host; HostGroup | -
-disable-active-checks                  | - | Host; HostGroup | -
-enable-notifications                   | - | Service; Host; ServiceGroup; HostGroup | Enable all notifications for services of host x?
-disable-notifications                  | - | Service; Host; ServiceGroup; HostGroup | -
-enable-flap-detection                  | - | Service; Host; ServiceGroup; HostGroup | -
-disable-flap-detection                 | - | Service; Host; ServiceGroup; HostGroup | -
-enable-event-handler                   | - | Service; Host | -
-disable-event-handler                  | - | Service; Host | -
-
-enable-global-notifications            | - | - | -
-disable-global-notifications           | - | - | -
-enable-global-flap-detection           | - | - | -
-disable-global-flap-detection          | - | - | -
-enable-global-event-handlers           | - | - | -
-disable-global-event-handlers          | - | - | -
-enable-global-performance-data         | - | - | -
-disable-global-performance-data        | - | - | -
-start-global-executing-svc-checks      | - | - | -
-stop-global-executing-svc-checks       | - | - | -
-start-global-executing-host-checks     | - | - | -
-stop-global-executing-host-checks      | - | - | -
-shutdown-process                       | - | - | -
-restart-process                        | - | - | -
-
+Custom notifications options:
+* 0 = No option (default)
+* 1 = Broadcast (send notification to all normal and all escalated contacts for the host)
+* 2 = Forced (notification is sent out regardless of current time, whether or not notifications are enabled, etc.)
+* 4 = Increment current notification # for the host (this is not done by default for custom notifications, )
 
 Examples:
 
