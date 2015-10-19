@@ -51,6 +51,7 @@ public:
 	intrusive_ptr<Zone> GetZone(void) const;
 
 	bool IsConnected(void) const;
+	bool GetConnected(void) const;
 
 	static Endpoint::Ptr GetLocalEndpoint(void);
 
