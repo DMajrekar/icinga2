@@ -45,14 +45,14 @@ REGISTER_APIACTION(remove_comment_by_id,     "",             &ApiActions::Remove
 REGISTER_APIACTION(schedule_downtime,        "Service;Host", &ApiActions::ScheduleDowntime);
 REGISTER_APIACTION(remove_downtime,          "Service;Host", &ApiActions::RemoveDowntime);
 REGISTER_APIACTION(remove_downtime_by_id,    "",             &ApiActions::RemoveDowntimeByID);
-
+/*
 REGISTER_APIACTION(modify_global_notification_delivery,       "", &ApiActions::ModifyGlobalNotificationDelivery);
 REGISTER_APIACTION(modify_global_flap_detection,              "", &ApiActions::ModifyGlobalFlapDetection);
 REGISTER_APIACTION(modify_global_event_handling,              "", &ApiActions::ModifyGlobalEventHandling);
 REGISTER_APIACTION(modify_global_performance_data_collection, "", &ApiActions::ModifyGlobalPerformanceDataCollection);
 REGISTER_APIACTION(modify_global_service_check_execution,     "", &ApiActions::ModifyGlobalServiceCheckExecution);
 REGISTER_APIACTION(modify_global_host_check_execution,        "", &ApiActions::ModifyGlobalHostCheckExecution);
-
+*/
 REGISTER_APIACTION(shutdown_process, "", &ApiActions::ShutdownProcess);
 REGISTER_APIACTION(restart_process,  "", &ApiActions::RestartProcess);
 
@@ -390,7 +390,7 @@ Dictionary::Ptr ApiActions::RemoveDowntimeByID(const ConfigObject::Ptr& object,
 
 	return ApiActions::CreateResult(200, "Successfully removed downtime " + Convert::ToString(downtime_id) + ".");
 }
-
+/*
 Dictionary::Ptr ApiActions::ModifyGlobalNotificationDelivery(const ConfigObject::Ptr& object,
     const Dictionary::Ptr& params)
 {
@@ -462,7 +462,7 @@ Dictionary::Ptr ApiActions::ModifyGlobalHostCheckExecution(const ConfigObject::P
 	return ApiActions::CreateResult(200, "Globally "
 	    + String((params->Get("active") ? "enabled" : "disabled")) + " host check execution.");
 }
-
+*/
 Dictionary::Ptr ApiActions::ShutdownProcess(const ConfigObject::Ptr& object,
     const Dictionary::Ptr& params)
 {

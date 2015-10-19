@@ -45,14 +45,14 @@ public:
 	static Dictionary::Ptr ScheduleDowntime(const ConfigObject::Ptr& object, const Dictionary::Ptr& params);
 	static Dictionary::Ptr RemoveDowntime(const ConfigObject::Ptr& object, const Dictionary::Ptr& params);
 	static Dictionary::Ptr RemoveDowntimeByID(const ConfigObject::Ptr& object, const Dictionary::Ptr& params);
-
+/*
 	static Dictionary::Ptr ModifyGlobalNotificationDelivery(const ConfigObject::Ptr& object, const Dictionary::Ptr& params);
 	static Dictionary::Ptr ModifyGlobalFlapDetection(const ConfigObject::Ptr& object, const Dictionary::Ptr& params);
 	static Dictionary::Ptr ModifyGlobalEventHandling(const ConfigObject::Ptr& object, const Dictionary::Ptr& params);
 	static Dictionary::Ptr ModifyGlobalPerformanceDataCollection(const ConfigObject::Ptr& object, const Dictionary::Ptr& params);
 	static Dictionary::Ptr ModifyGlobalServiceCheckExecution(const ConfigObject::Ptr& object, const Dictionary::Ptr& params);
 	static Dictionary::Ptr ModifyGlobalHostCheckExecution(const ConfigObject::Ptr& object, const Dictionary::Ptr& params);
-
+*/
 	static Dictionary::Ptr ShutdownProcess(const ConfigObject::Ptr& object, const Dictionary::Ptr& params);
 	static Dictionary::Ptr RestartProcess(const ConfigObject::Ptr& object, const Dictionary::Ptr& params);
 
