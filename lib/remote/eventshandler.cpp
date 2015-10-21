@@ -20,6 +20,8 @@
 #include "remote/eventshandler.hpp"
 #include "remote/httputility.hpp"
 #include "remote/filterutility.hpp"
+#include "config/configcompiler.hpp"
+#include "config/expression.hpp"
 #include "base/objectlock.hpp"
 #include "base/json.hpp"
 #include <boost/foreach.hpp>
@@ -67,8 +69,12 @@ bool EventsHandler::HandleRequest(const ApiUser::Ptr& user, HttpRequest& request
 
 	// TODO: add ttl and fetch value from params
 	double ttl = 0.0;
-	// TODO: add filter
-	Expression *filter = NULL;
+	Expression *ufilter = NULL;
+
+	String filter = HttpUtility::GetLastParameter(params, "filter");
+
+	if (!filter.IsEmpty())
+		ufilter = ConfigCompiler::CompileText("<API query>", filter);
 
 	/* create a new queue or update an existing one */
 	EventQueue::Ptr queue = EventQueue::GetByName(queueName);
@@ -80,7 +86,7 @@ bool EventsHandler::HandleRequest(const ApiUser::Ptr& user, HttpRequest& request
 
 	queue->SetTypes(types->ToSet<String>());
 	queue->SetTtl(ttl);
-	queue->SetFilter(filter);
+	queue->SetFilter(ufilter);
 
 	queue->AddClient(&request);
 

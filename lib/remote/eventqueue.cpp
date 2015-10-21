@@ -18,6 +18,7 @@
  ******************************************************************************/
 
 #include "remote/eventqueue.hpp"
+#include "remote/filterutility.hpp"
 #include "base/singleton.hpp"
 
 using namespace icinga;
@@ -40,7 +41,11 @@ bool EventQueue::CanProcessEvent(const String& type) const
 
 void EventQueue::ProcessEvent(const Dictionary::Ptr& event)
 {
-	//TODO: filter
+	ScriptFrame frame;
+
+	if (!FilterUtility::EvaluateFilter(frame, m_Filter, event, "event"))
+		return;
+
 	boost::mutex::scoped_lock lock(m_Mutex);
 
 	typedef std::pair<void *const, std::deque<Dictionary::Ptr> > kv_pair;
