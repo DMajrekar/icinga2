@@ -104,10 +104,44 @@ void ApiEvents::StateChangeHandler(const Checkable::Ptr& checkable, const CheckR
 	}
 }
 
-void ApiEvents::NotificationSentToAllUsersHandler(const Notification::Ptr& notification, const Checkable::Ptr& checkable, const std::set<User::Ptr>& users, NotificationType type,
+void ApiEvents::NotificationSentToAllUsersHandler(const Notification::Ptr& notification,
+    const Checkable::Ptr& checkable, const std::set<User::Ptr>& users, NotificationType type,
     const CheckResult::Ptr& cr, const String& author, const String& text)
 {
-	/* TODO: implement. */
+	std::vector<EventQueue::Ptr> queues = EventQueue::GetQueuesForType("Notification");
+
+	if (queues.empty())
+		return;
+
+	Log(LogDebug, "ApiEvents", "Processing event type 'Notification'.");
+
+	Dictionary::Ptr result = new Dictionary();
+	result->Set("type", "Notification");
+	result->Set("timestamp", Utility::GetTime());
+
+	Host::Ptr host;
+	Service::Ptr service;
+	tie(host, service) = GetHostService(checkable);
+
+	result->Set("host", host->GetName());
+	if (service)
+		result->Set("service", service->GetShortName());
+
+	Array::Ptr userNames = new Array();
+
+	BOOST_FOREACH(const User::Ptr& user, users) {
+		userNames->Add(user->GetName());
+	}
+
+	result->Set("users", userNames);
+	result->Set("notification_type", Notification::NotificationTypeToString(type));
+	result->Set("author", author);
+	result->Set("text", text);
+	result->Set("check_result", Serialize(cr));
+
+	BOOST_FOREACH(const EventQueue::Ptr& queue, queues) {
+		queue->ProcessEvent(result);
+	}
 }
 
 void ApiEvents::FlappingChangedHandler(const Checkable::Ptr& checkable, const MessageOrigin::Ptr& origin)
