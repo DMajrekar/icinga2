@@ -46,7 +46,12 @@ bool EventsHandler::HandleRequest(const ApiUser::Ptr& user, HttpRequest& request
 
 	Array::Ptr types = params->Get("types");
 
-	if (types) {
+	if (!types) {
+		HttpUtility::SendJsonError(response, 400, "'types' query parameter is required.");
+		return true;
+	}
+
+	{
 		ObjectLock olock(types);
 		BOOST_FOREACH(const String& type, types) {
 			FilterUtility::CheckPermission(user, "events/" + type);
@@ -56,11 +61,11 @@ bool EventsHandler::HandleRequest(const ApiUser::Ptr& user, HttpRequest& request
 	String queueName = HttpUtility::GetLastParameter(params, "queue");
 
 	if (queueName.IsEmpty()) {
-		HttpUtility::SendJsonError(response, 400, "'queue' attribute is required.");
+		HttpUtility::SendJsonError(response, 400, "'queue' query parameter is required.");
 		return true;
 	}
 
-	// TODO: add ttl cache and fetch value from params
+	// TODO: add ttl and fetch value from params
 	double ttl = 0.0;
 	// TODO: add filter
 	Expression *filter = NULL;
@@ -77,7 +82,6 @@ bool EventsHandler::HandleRequest(const ApiUser::Ptr& user, HttpRequest& request
 	queue->SetTtl(ttl);
 	queue->SetFilter(filter);
 
-	/* add http client to queue */
 	queue->AddClient(&request);
 
 	response.SetStatus(200, "OK");
