@@ -90,7 +90,11 @@ bool EventsHandler::HandleRequest(const ApiUser::Ptr& user, HttpRequest& request
 	for (;;) {
 		Dictionary::Ptr result = queue->WaitForEvent(&request);
 
-		// TODO: Check if client is still connected
+		if (!response.IsPeerConnected()) {
+			queue->RemoveClient(&request);
+			EventQueue::UnregisterIfUnused(queueName, queue);
+			return true;
+		}
 
 		if (!result)
 			continue;
